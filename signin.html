@@ -67,33 +67,42 @@
     </div>
 
     <script>
+    const SUPABASE_URL = 'https://eyjznvdwygrmwtwcitah.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5anpudmR3eWdybXd0d2NpdGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTU4MTYsImV4cCI6MjA4MzMzMTgxNn0.peEYldCsD4bN6eELGZ0i6KUmdGu8BQO3ne6bEZtB9IM';
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function login() {
+        const emailValue = document.getElementById('email').value;
+        const passwordValue = document.getElementById('password').value;
         const messageBox = document.getElementById('message');
-        const serverUrl = 'http://localhost:3000';
 
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        messageBox.innerText = "Verifying...";
 
-            if (!username || !password) {
-                messageBox.innerText = "Please fill in all fields.";
-                return;
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: emailValue,
+                password: passwordValue,
+            });
+
+            if (error) {
+                messageBox.innerText = "Error: " + error.message;
+                messageBox.style.color = "#ff4d4d";
+            } else {
+                messageBox.innerText = "Success! Redirecting...";
+                messageBox.style.color = "#88bbff";
+                
+                // --- REDIRECT LOGIC ---
+                // Wait 1 second so the user can see the success message, then move
+                setTimeout(() => {
+                    window.location.href = "dashboard.html"; 
+                }, 1000);
             }
-
-            try {
-                const response = await fetch(`${serverUrl}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const result = await response.text();
-                messageBox.innerText = result;
-            } catch (error) {
-                messageBox.innerText = "Error: Could not connect to server.";
-            }
+        } catch (err) {
+            console.error("Critical error:", err);
+            messageBox.innerText = "An unexpected error occurred.";
         }
-
-        document.getElementById('loginBtn').addEventListener('click', login);
-    </script>
+    }
+</script>
 </body>
 </html>
