@@ -62,17 +62,19 @@
         <input type="text" id="username" placeholder="Username" required>
         <input type="password" id="password" placeholder="Password" required>
         
-        <button id="loginBtn">Log In</button>
+        <button type="button" onclick="login()">Log In</button>
         
         <p id="message"></p>
     </div>
 
     <script>
+
     const SUPABASE_URL = 'https://eyjznvdwygrmwtwcitah.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5anpudmR3eWdybXd0d2NpdGFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NTU4MTYsImV4cCI6MjA4MzMzMTgxNn0.peEYldCsD4bN6eELGZ0i6KUmdGu8BQO3ne6bEZtB9IM';
     
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        
     async function login() {
         const emailValue = document.getElementById('email').value;
         const passwordValue = document.getElementById('password').value;
